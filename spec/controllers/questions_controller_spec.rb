@@ -6,7 +6,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
 
-    before {get :index}
+    before { get :index }
     it 'populates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
@@ -44,6 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'saves a new questions in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+
       end
 
       it 'redirect to show' do
