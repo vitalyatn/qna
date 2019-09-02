@@ -6,8 +6,9 @@ feature 'User can see list of questions', %q{
 } do
 
   scenario 'show list of questions' do
+    create_list(:question, 3)
     visit questions_path
-    have_content "Title"
+    expect(page).to have_content 'MyString'
   end
 
 end

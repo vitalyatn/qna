@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'byebug'
 
 RSpec.describe AnswersController, type: :controller do
+
+  let(:user) { create(:user) }
   let!(:answer) { create(:answer) }
 
   describe 'GET #show' do
@@ -13,6 +15,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new, params: { question_id: answer.question } }
 
     it 'renders new view' do
@@ -21,6 +25,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(answer.user) }
+
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: answer.question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
@@ -44,6 +50,20 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to render_template :new
       end
     end
+  end
 
+  describe 'DELETE #destroy' do
+    before { login(user) }
+
+    let!(:answer) { create(:answer) }
+
+    it 'delete the answer' do
+      expect { delete :destroy, params: { question_id: answer.question, id: answer } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to index' do
+      delete :destroy, params: { question_id: answer.question, id: answer }
+      expect(response).to redirect_to question_path(answer.question)
+    end
   end
 end

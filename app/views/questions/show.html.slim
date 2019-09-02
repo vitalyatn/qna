@@ -1,2 +1,14 @@
 h1= question.title
 p= question.body
+=link_to 'Delete question', question_path(question), method: :delete if user_signed_in? && question.user_author?(current_user)
+h2 Answers
+//p= question.answers.first.body
+ol
+  = render question.answers
+
+
+= form_with model: [question, Answer.new], local: true do |f|
+  = f.label :body
+  = f.text_area :body
+  = f.submit 'Add answer'
+
