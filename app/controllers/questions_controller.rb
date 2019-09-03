@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    #byebug
   end
 
   def create
@@ -33,7 +34,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy
+    question.destroy if user_signed_in? && current_user.author?(question)
     redirect_to questions_path
   end
 

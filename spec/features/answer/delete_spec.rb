@@ -8,10 +8,8 @@ feature 'User can delete own answer', %q{
   given(:question) { create(:question) }
 
   background do
-    @question = question
-    @answers = create_list(:answer, 5, question: @question)
+    @answers = create_list(:answer, 5, question: question)
     @answer = @answers.first
-    #byebug
   end
 
   scenario 'delete own question' do

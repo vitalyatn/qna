@@ -20,7 +20,6 @@ feature 'User can delete own question', %q{
     expect(page).to have_content(user.email)
     click_on 'Delete question'
     expect(page).to have_no_content(@question.title)
-    #save_and_open_page
   end
 
   scenario 'not author tries delete question' do

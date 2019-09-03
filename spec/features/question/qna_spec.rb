@@ -4,7 +4,6 @@ feature 'User can see question and answer', %q{
   чтобы узнать информацию по интересующей задаче
 } do
 
-
   given(:question) { create(:question) }
 
   scenario 'show list of questions' do

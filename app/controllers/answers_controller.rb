@@ -15,12 +15,12 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @answer.question, notice: 'Your answer successfully created'
     else
-      render :new
+      render 'questions/show', locals: { question: @question }
     end
   end
 
   def destroy
-    @answer.destroy
+    @answer.destroy if user_signed_in? && current_user.author?(@answer)
     redirect_to question_path(@answer.question)
   end
 

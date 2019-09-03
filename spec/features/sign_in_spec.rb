@@ -16,7 +16,6 @@ feature 'User can sign in', %q{
     fill_in 'Password', with: user.password
     click_on 'Log in'
 
-    #save_and_open_page
     expect(page).to have_content 'Signed in successfully'
   end
 
@@ -25,7 +24,6 @@ feature 'User can sign in', %q{
     fill_in 'Password', with: '12345678'
     click_on 'Log in'
 
-    #save_and_open_page
     expect(page).to have_content 'Invalid Email or password'
   end
 end

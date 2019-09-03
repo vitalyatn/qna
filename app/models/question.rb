@@ -4,7 +4,4 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
-  def user_author?(current_user)
-    current_user == user
-  end
 end

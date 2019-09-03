@@ -7,4 +7,8 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
 
+  def author?(resource)
+    resource.user == self
+  end
+
 end
