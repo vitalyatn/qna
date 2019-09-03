@@ -23,17 +23,14 @@ feature 'User can add answer to question', %q{
     scenario 'add answer to question with errors' do
       visit question_path(question)
       click_on 'Add answer'
-
-      #expect(page).to have_content "Body can't be blank"
+      #save_and_open_page
+      expect(page).to have_content "Body can't be blank"
     end
   end
 
   scenario 'Unauthenticated user tries add answer to question' do
     visit question_path(question)
-    fill_in 'Body', with: 'text text text'
-    click_on 'Add answer'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_no_content 'Add answer'
   end
 
 end

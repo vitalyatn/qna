@@ -6,7 +6,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    #byebug
   end
 
   def create

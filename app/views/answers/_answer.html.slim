@@ -1,3 +1,4 @@
-li
-  = answer.body
-  = link_to 'Delete answer', question_answer_path(question, answer), method: :delete if user_signed_in? && current_user.author?(answer)
+-if answer.persisted?
+  li
+    = answer.body
+    = link_to 'Delete answer', answer_path(answer), method: :delete if user_signed_in? && current_user.author?(answer)
