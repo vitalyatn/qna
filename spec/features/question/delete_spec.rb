@@ -13,7 +13,6 @@ feature 'User can delete own question', %q{
   scenario 'delete own question' do
     user = @question.user
     sign_in(user)
-    visit questions_path
     expect(page).to have_content(@question.title)
     visit question_path(@question)
     expect(page).to have_content(@question.body)

@@ -22,10 +22,13 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
+    #byebug
+    if current_user&.author?(question)
+      if question.update(question_params)
+        redirect_to @question
+      else
+        render :edit
+      end
     end
   end
 
@@ -33,7 +36,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy if user_signed_in? && current_user.author?(question)
+    question.destroy if current_user&.author?(question)
     redirect_to questions_path
   end
 

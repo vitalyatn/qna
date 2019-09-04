@@ -23,7 +23,6 @@ feature 'User can add answer to question', %q{
     scenario 'add answer to question with errors' do
       visit question_path(question)
       click_on 'Add answer'
-      #save_and_open_page
       expect(page).to have_content "Body can't be blank"
     end
   end

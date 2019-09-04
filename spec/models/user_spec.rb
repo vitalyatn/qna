@@ -7,27 +7,25 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
 
-  describe ".author?" do
-    let!(:user) { create(:user) }
+  describe "#author?" do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, user: user) }
 
     it "of question_true" do
-      question = create(:question, user: user)
-      expect(user).to eq(question.user)
+      expect(user.author?(question)).to eq(true)
     end
 
     it "of answer_true" do
-      answer = create(:question, user: user)
-      expect(user).to eq(answer.user)
+      expect(user.author?(answer)).to eq(true)
     end
 
     it "of question_false" do
-      question = create(:question)
-      expect(user).to_not eq(question.user)
+      expect(user.author?(create(:question))).to eq(false)
     end
 
     it "of answer_true_false" do
-      answer = create(:question)
-      expect(user).to_not eq(answer.user)
+      expect(user.author?(create(:answer))).to eq(false)
     end
   end
 end

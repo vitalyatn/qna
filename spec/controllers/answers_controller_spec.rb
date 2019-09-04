@@ -42,7 +42,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       context 'with invalid attributes' do
-        it 'does not save the question' do
+        it 'does not save the answer' do
           expect { post :create, params: { question_id: answer.question, answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
         end
 
@@ -54,7 +54,7 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Non authorized user tries create answer' do
-      it 'does not save the question', skip_before: true do
+      it 'does not save the answer', skip_before: true do
         expect { post :create, params: { question_id: answer.question, answer: attributes_for(:answer) } }.to_not change(Answer, :count)
       end
     end

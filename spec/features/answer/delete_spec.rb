@@ -33,6 +33,5 @@ feature 'User can delete own answer', %q{
   scenario 'unauthorized user tries delete question' do
     visit question_path(@answer.question)
     expect(page).to have_no_content('Delete question')
-    save_and_open_page
   end
 end
