@@ -52,6 +52,8 @@ RSpec.describe QuestionsController, type: :controller do
       context 'with valid attributes' do
         it 'saves a new questions in the database' do
           expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+          last_question = Question.order(created_at: :desc).first
+          expect(user).to eq(last_question.user)
         end
 
         it 'redirect to show' do
@@ -126,7 +128,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'is not author' do
-        it 'changes question attributes' do
+        it 'does not change question attributes' do
           patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
           question.reload
 
@@ -136,7 +138,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
     context 'Unauthenticated user' do
-      it 'changes question attributes' do
+      it 'does not change question attributes' do
         patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
         question.reload
 

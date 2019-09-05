@@ -8,10 +8,7 @@ class User < ApplicationRecord
   has_many :answers
 
   def author?(resource)
-    #насчет универсальности не знаю...если добавятся еще какие-то сущности
-    # то придется сюда лезть и добавлять сущность? или это можно сделать как-то
-    # универсальнее?
-    (questions.include? resource) || (answers.include? resource)
+    id == resource.user_id
   end
 
 end

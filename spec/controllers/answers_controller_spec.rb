@@ -33,6 +33,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :create, params: { question_id: answer.question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
           last_answer = Answer.order(created_at: :desc).first
           expect(last_answer.question).to eq(answer.question)
+          expect(user).to eq(last_answer.user)
         end
 
         it 'redirect to question' do
