@@ -1,8 +1,6 @@
-p= link_to 'Ask question', new_question_path if user_signed_in?
+.questions
+  .question-errors
 
-table
-  thead
-    tr
-      th Question title
-  tbody
-    = render @questions
+  = render @questions
+
+p= link_to 'Ask question', new_question_path if user_signed_in?
