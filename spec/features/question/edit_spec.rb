@@ -26,17 +26,11 @@ feature 'User can edit his question', %q{
         expect(page).to_not have_content question.body
         expect(page).to have_content 'edited title'
         expect(page).to_not have_selector 'textarea'
-
-        #visit question_path(question)
-        #Хотел зайти на страницу вопроса и убедиться что
-        #вопрос был полностью изменен, но ошибка:
-        #  Selenium::WebDriver::Error::StaleElementReferenceError:
-        #        stale element reference: element is not attached to the page document
-        #          (Session info: headless chrome=76.0.3809.132)
-        # или это делать вообще не нужно?
-        #expect(page).to have_content 'edited title'
-        #expect(page).to have_content 'edited question'
       end
+        visit question_path(question)
+        expect(page).to have_content 'edited title'
+        expect(page).to have_content 'edited question'
+
     end
 
     scenario 'edit his answer with errors', js: true do

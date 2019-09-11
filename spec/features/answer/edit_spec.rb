@@ -54,4 +54,5 @@ feature 'User can edit his answet', %q{
       expect(page).to_not have_link 'Edit'
     end
   end
+
 end

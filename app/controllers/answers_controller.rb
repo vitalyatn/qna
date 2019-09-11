@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create]
   before_action :set_answer, only: %i[destroy show update better]
+  before_action :author?, only: %i[update destroy]
 
   def show
   end
@@ -21,25 +22,23 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy if current_user&.author?(@answer)
+    @answer.destroy
   end
 
   def better
-    if @answer.question.has_better_answer?
-      @answer.question.delete_better
-      @answer.update(better: true)
-    else
-      @answer.update(better: true)
-    end
+    @answer.set_better if current_user&.author?(@answer.question)
   end
 
   private
+  def author?
+    redirect_to questions_path unless current_user&.author?(@answer)
+  end
 
   def set_answer
     @answer = Answer.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :better)
+    params.require(:answer).permit(:body)
   end
 end

@@ -87,7 +87,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let!(:answer) { create(:answer, question: question) }
+    before { login(user) }
+    let!(:answer) { create(:answer, question: question, user: user) }
 
     context 'with valid attributes' do
       it 'changes answer attributes' do
@@ -105,7 +106,7 @@ RSpec.describe AnswersController, type: :controller do
     context 'with invalid attributes' do
       it 'does not change answer attributes' do
         expect do
-         patch :update, params: {id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          patch :update, params: {id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         end.to_not change(answer, :body)
       end
 
@@ -117,13 +118,13 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #better' do
-    context 'Author can' do
+    describe 'Author can' do
       before { login(user) }
-
+      let!(:question) { create(:question, user: user) }
+      let!(:answers) { create_list(:answer, 5, question: question) }
+  
       context 'choose better answer' do
         it 'changes answer attributes (question has not better answer)' do
-          question = create(:question, user: user)
-          answers = create_list(:answer, 5, question: question)
           answer = answers.first
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
@@ -131,8 +132,6 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'changes answer attributes (question has better answer)' do
-          question = create(:question, user: user)
-          answers = create_list(:answer, 5, question: question)
           answers << create(:answer, question: question, better: true)
           old_better_answer = answers.last
           answer = answers.first
@@ -148,9 +147,66 @@ RSpec.describe AnswersController, type: :controller do
           expect(response).to render_template :better
         end
       end
+    end
 
-      context 'change better answer' do
+    describe 'Not author can not' do
+      before { login(user) }
+      let!(:question) { create(:question) }
+      let!(:answers) { create_list(:answer, 5, question: question) }
 
+      context 'choose better answer' do
+        it 'does not change answer attributes (question has not better answer)' do
+          answer = answers.first
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          answer.reload
+          expect(answer.better).to_not eq true
+        end
+
+        it 'does not change answer attributes (question has better answer)' do
+          answers << create(:answer, question: question, better: true)
+          old_better_answer = answers.last
+          answer = answers.first
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          answer.reload
+          old_better_answer.reload
+          expect(answer.better).to_not eq true
+          expect(old_better_answer.better).to_not eq false
+        end
+
+        it 'renders update view' do
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          expect(response).to render_template :better
+        end
+      end
+    end
+
+    describe 'Guest can not' do
+      let!(:question) { create(:question) }
+      let!(:answers) { create_list(:answer, 5, question: question) }
+
+      context 'choose better answer' do
+        it 'does not change answer attributes (question has not better answer)' do
+          answer = answers.first
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          answer.reload
+          expect(answer.better).to_not eq true
+        end
+
+        it 'does not change answer attributes (question has better answer)' do
+          answers << create(:answer, question: question, better: true)
+          old_better_answer = answers.last
+          answer = answers.first
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          answer.reload
+          old_better_answer.reload
+          expect(answer.better).to_not eq true
+          expect(old_better_answer.better).to_not eq false
+        end
+
+        it 'renders update view' do
+          patch :better, params: { id: answer, answer: { better: true } }, format: :js
+          expect(response).to render_template :better
+        end
       end
     end
   end

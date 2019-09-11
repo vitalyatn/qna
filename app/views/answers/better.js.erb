@@ -1,4 +1,1 @@
-$(".better_answer").empty();
-$('.better_answer').append('<%= j render @answer %>');
-
-("#answer-<%= @answer.id %>").hide();
+$("#answer-<%= @answer.id %>").prependTo($(".answers"))

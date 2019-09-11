@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'User can choose better answer to question', %q{
   чтобы показать, что данный ответ решил его проблему
 } do
-  
+
   describe 'Authenticated user' do
     given!(:user) { create(:user) }
     given!(:question) { create(:question, user: user) }
@@ -17,7 +17,7 @@ feature 'User can choose better answer to question', %q{
         within "#answer-#{better_answer.id}" do
           click_on "Better"
         end
-        within ".better_answer" do
+        within ".answersgit" do
           expect(page).to have_content better_answer.body
         end
       end

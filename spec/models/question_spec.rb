@@ -8,24 +8,22 @@ RSpec.describe Question, type: :model do
   it { should validate_presence_of :body }
 
   describe "#has_better_answer?" do
-    it "true" do
-      question = create(:question)
-      answers = create_list(:answer, 3, question: question)
+    let!(:question) { create(:question) }
+    let!(:answers) { create_list(:answer, 5, question: question) }
+    it "returns true" do
       answers << create(:answer, question: question, better: true)
       expect(question.has_better_answer?).to eq(true)
     end
 
-    it "false" do
-      question = create(:question)
-      answers = create_list(:answer, 3, question: question)
+    it "returns false" do
       expect(question.has_better_answer?).to eq(false)
     end
   end
 
   describe "#delete_better" do
+    let!(:question) { create(:question) }
+    let!(:answers) { create_list(:answer, 5, question: question) }
     it "sets 'better' to false" do
-      question = create(:question)
-      answers = create_list(:answer, 3, question: question)
       answers << create(:answer, question: question, better: true)
       question.delete_better
       expect(question.has_better_answer?).to eq(false)

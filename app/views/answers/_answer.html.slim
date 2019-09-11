@@ -1,11 +1,13 @@
-//.answer[ answer = answer.id ]
 div id="answer-#{answer.id}"
-  = answer.body
+  -if answer.best?
+    h3= answer.body
+  -else
+    = answer.body
+
   = link_to 'Delete answer', answer_path(answer),remote: true, method: :delete if current_user&.author?(answer)
   = ' '
   =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } if current_user&.author?(answer)
   = ' '
-
   =link_to 'Better', better_answer_path(answer) ,method: :patch, remote: true, class: "better_#{answer.id}" if current_user&.author?(answer.question)
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"} do |f|
