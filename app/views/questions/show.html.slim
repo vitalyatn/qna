@@ -3,12 +3,11 @@ p= question.body
 =link_to 'Delete question', question_path(question), method: :delete if current_user&.author?(question)
 h2 Answers
 
-- answers = question.sort_answers
 .answers
   //.better_answer
     = question.better_answer.body unless question.better_answer.nil?
 
-  = render answers
+  = render question.answers
 
 -if user_signed_in?
   .answer-errors

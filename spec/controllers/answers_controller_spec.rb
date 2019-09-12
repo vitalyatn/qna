@@ -107,6 +107,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not change answer attributes' do
         expect do
           patch :update, params: {id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          answer.reload
         end.to_not change(answer, :body)
       end
 
@@ -138,8 +139,8 @@ RSpec.describe AnswersController, type: :controller do
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
           old_better_answer.reload
-          expect(answer.better).to eq true
-          expect(old_better_answer.better).to eq false
+          expect(answer).to be_better
+          expect(old_better_answer).not_to be_better
         end
 
         it 'renders update view' do
@@ -159,7 +160,7 @@ RSpec.describe AnswersController, type: :controller do
           answer = answers.first
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
-          expect(answer.better).to_not eq true
+          expect(answer).not_to be_better
         end
 
         it 'does not change answer attributes (question has better answer)' do
@@ -169,8 +170,8 @@ RSpec.describe AnswersController, type: :controller do
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
           old_better_answer.reload
-          expect(answer.better).to_not eq true
-          expect(old_better_answer.better).to_not eq false
+          expect(answer).not_to be_better
+          expect(old_better_answer).to be_better
         end
 
         it 'renders update view' do
@@ -189,7 +190,7 @@ RSpec.describe AnswersController, type: :controller do
           answer = answers.first
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
-          expect(answer.better).to_not eq true
+          expect(answer).not_to be_better
         end
 
         it 'does not change answer attributes (question has better answer)' do
@@ -199,8 +200,8 @@ RSpec.describe AnswersController, type: :controller do
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
           old_better_answer.reload
-          expect(answer.better).to_not eq true
-          expect(old_better_answer.better).to_not eq false
+          expect(answer).not_to be_better
+          expect(old_better_answer).to be_better
         end
 
         it 'renders update view' do

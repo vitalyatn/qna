@@ -1,12 +1,8 @@
 class Question < ApplicationRecord
-  has_many :answers, dependent: :destroy
+  has_many :answers,-> { order(better: :desc, created_at: :asc) }, dependent: :destroy
   belongs_to :user
 
   validates :title, :body, presence: true
-
-  def has_better_answer?
-    !get_better_answer.empty?
-  end
 
   def delete_better
     get_better_answer.update(better: false)
@@ -14,10 +10,6 @@ class Question < ApplicationRecord
 
   def better_answer
     get_better_answer[0] unless get_better_answer.nil?
-  end
-
-  def sort_answers
-    answers.sort_by_best
   end
 
   private
