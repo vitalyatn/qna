@@ -17,7 +17,7 @@ feature 'User can choose better answer to question', %q{
         within "#answer-#{better_answer.id}" do
           click_on "Better"
         end
-        within ".answersgit" do
+        within ".answers" do
           expect(page).to have_content better_answer.body
         end
       end

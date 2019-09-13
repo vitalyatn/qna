@@ -129,7 +129,7 @@ RSpec.describe AnswersController, type: :controller do
           answer = answers.first
           patch :better, params: { id: answer, answer: { better: true } }, format: :js
           answer.reload
-          expect(answer.better).to eq true
+          expect(answer).to be_better
         end
 
         it 'changes answer attributes (question has better answer)' do

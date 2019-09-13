@@ -26,7 +26,8 @@ class AnswersController < ApplicationController
   end
 
   def better
-    @answer.set_better if current_user&.author?(@answer.question)
+    #byebug
+    @answer.set_better! if current_user&.author?(@answer.question)
   end
 
   private

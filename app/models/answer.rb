@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  def set_better
+  def set_better!
     transaction do
       question.answers.find_by(better: true)&.update!(better: false)
       update!(better: true)

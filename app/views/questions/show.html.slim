@@ -4,9 +4,6 @@ p= question.body
 h2 Answers
 
 .answers
-  //.better_answer
-    = question.better_answer.body unless question.better_answer.nil?
-
   = render question.answers
 
 -if user_signed_in?
