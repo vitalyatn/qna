@@ -12,13 +12,17 @@ RSpec.describe Answer, type: :model do
 
     it "create best answer" do
       answer = answers[0]
-      expect(answer.set_better!).to eq(true)
+      answer.set_better!
+      expect(answer).to be_better
     end
 
     it "change best_answer" do
       old_best = create(:answer, question: question, better: true)
       answer = answers[0]
-      expect(answer.set_better!).to eq(true)
+      answer.set_better!
+      old_best.reload
+      expect(old_best).not_to be_better
+      expect(answer).to be_better
     end
   end
 end
