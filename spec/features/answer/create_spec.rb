@@ -11,16 +11,15 @@ feature 'User can add answer to question', %q{
   describe 'Authenticated user' do
     background { sign_in(user) }
 
-    scenario 'add answer to question' do
+    scenario 'add answer to question', js: true  do
       visit question_path(question)
       fill_in 'Body', with: 'text text text'
       click_on 'Add answer'
 
-      expect(page).to have_content 'Your answer successfully created'
       expect(page).to have_content 'text text text'
     end
 
-    scenario 'add answer to question with errors' do
+    scenario 'add answer to question with errors', js: true do
       visit question_path(question)
       click_on 'Add answer'
       expect(page).to have_content "Body can't be blank"

@@ -12,7 +12,7 @@ feature 'User can delete own answer', %q{
     @answer = @answers.first
   end
 
-  scenario 'delete own question' do
+  scenario 'delete own question', js: true do
     user = @answers.first.user
     sign_in(user)
     visit question_path(@answer.question)

@@ -1,9 +1,9 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :author?, only: %i[update destroy]
+  before_action :all_questions, only: %i[index update]
 
   def index
-    @questions = Question.all
   end
 
   def show
@@ -23,11 +23,7 @@ class QuestionsController < ApplicationController
   def new; end
 
   def update
-    if question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    question.update(question_params)
   end
 
   def edit; end
@@ -45,6 +41,10 @@ class QuestionsController < ApplicationController
 
   def author?
     redirect_to questions_path unless current_user&.author?(question)
+  end
+
+  def all_questions
+    @questions = Question.all
   end
 
   helper_method :question
