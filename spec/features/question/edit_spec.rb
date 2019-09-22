@@ -33,7 +33,7 @@ feature 'User can edit his question', %q{
 
     end
 
-    scenario 'edit his answer with errors', js: true do
+    scenario 'edit his question with errors', js: true do
       sign_in(user)
 
       click_on 'Edit'
@@ -46,6 +46,23 @@ feature 'User can edit his question', %q{
         expect(page).to have_content question.body
         expect(page).to have_content 'error'
       end
+    end
+
+    scenario 'edit his question with attached file', js: true do
+      sign_in(user)
+
+      click_on 'Edit'
+
+      within '.questions' do
+        fill_in "Question's title", with: 'edited title'
+        fill_in 'Your question', with: 'edited question'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save'
+      end
+
+      visit question_path(question)
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
 
     scenario "tries to edit other user's answer", js: true do

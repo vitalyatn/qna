@@ -4,6 +4,13 @@ div id="answer-#{answer.id}"
   -else
     = answer.body
 
+  - if answer.files.attached?
+    - answer.files.each do |file|
+      p class=["answer-file-#{file.id}"]
+        = link_to file.filename.to_s, url_for(file)
+        =>
+        = link_to 'Delete', delete_file_attachment_answer_path(answer, file_id: file), remote: true, method: :delete if current_user&.author?(answer)
+
   = link_to 'Delete answer', answer_path(answer),remote: true, method: :delete if current_user&.author?(answer)
   =>
   =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id } if current_user&.author?(answer)
@@ -13,4 +20,6 @@ div id="answer-#{answer.id}"
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"} do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body
+    = f.label :files
+    = f.file_field :files, multiple: true
     = f.submit 'Save'

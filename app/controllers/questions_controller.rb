@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :author?, only: %i[update destroy]
+  before_action :author?, only: %i[update destroy delete_file_attachment]
   before_action :all_questions, only: %i[index update]
 
   def index
@@ -33,10 +33,15 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
+  def delete_file_attachment
+    @file = ActiveStorage::Attachment.find(params[:file_id])
+    @file.purge
+  end
+
   private
 
   def question
-    @question ||= params[:id] ? Question.find(params[:id]) : Question.new
+    @question ||= params[:id] ? Question.with_attached_files.find(params[:id]) : Question.new
   end
 
   def author?
@@ -50,6 +55,6 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 end

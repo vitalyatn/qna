@@ -211,4 +211,30 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #delete_file_attachment' do
+    context 'Authenticated user' do
+      before { login(user) }
+      it 'tries delete file from own answer' do
+        answer = create(:answer, :with_file, user: user)
+        expect { delete :delete_file_attachment, params: { id: answer, file_id: answer.files.first }, format: :js }.to change(answer.files, :count).by(-1)
+      end
+
+      it 'tries delete file from other question' do
+        answer = create(:answer, :with_file)
+        expect { delete :delete_file_attachment, params: { id: answer, file_id: answer.files.first }, format: :js }.to_not change(answer.files, :count)
+      end
+
+      it 'redirects to index' do
+        delete :delete_file_attachment, params: { id: answer, file_id: answer.files.first }
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'Non authenticated user' do
+      it 'tries delete question' do
+        expect { delete :delete_file_attachment, params: { id: answer, file_id: answer.files.first }, format: :js }.to_not change(answer.files, :count)
+      end
+    end
+  end
 end

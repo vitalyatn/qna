@@ -4,8 +4,12 @@ Rails.application.routes.draw do
   root to: "questions#index"
 
   resources :questions do
+    delete :delete_file_attachment, on: :member
     resources :answers, shallow: true do
-      patch :better, on: :member
+      member do
+        patch :better
+        delete :delete_file_attachment
+      end
     end
   end
 end

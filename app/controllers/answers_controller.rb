@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: %i[create]
-  before_action :set_answer, only: %i[destroy show update better]
-  before_action :author?, only: %i[update destroy]
+  before_action :set_answer, only: %i[destroy show update better delete_file_attachment]
+  before_action :author?, only: %i[update destroy delete_file_attachment]
 
   def show
   end
@@ -26,20 +26,25 @@ class AnswersController < ApplicationController
   end
 
   def better
-    #byebug
     @answer.set_better! if current_user&.author?(@answer.question)
   end
 
+  def delete_file_attachment
+    @file = ActiveStorage::Attachment.find(params[:file_id])
+    @file.purge
+  end
+
   private
+
   def author?
     redirect_to questions_path unless current_user&.author?(@answer)
   end
 
   def set_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 end
